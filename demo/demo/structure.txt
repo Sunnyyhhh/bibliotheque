@@ -1,0 +1,23 @@
+demo
+    src
+        main
+            java
+                com
+                    example
+                        controllers
+                            CategorieController.jsp
+                        entities
+                            Categorie.jsp
+                        repositories
+                            CategorieRepository.jsp
+                        services
+                            CategorieService.jsp
+                        config
+                            WebConfig.jsp
+            webapp
+                WEB-INF
+                    jsp
+    target
+        classes
+pom.xml
+mvnw.cmd

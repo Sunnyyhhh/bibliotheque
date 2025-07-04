@@ -1,0 +1,58 @@
+Liste des livres 
+Liste des livres que la personne a emprunte
+Liste des livres dispo(exemplaire restant)
+Il reste des exemplaires a la date prevue d'emprunt
+
+Criteres d'emprunt par adherent
+    DOMICILE
+        -non penalise au moment de l'emprunt => ok
+        -a l'age requis => ok
+        -peut faire l'emprunt dans la maniere a emprunter (domicile) => ok
+        -est toujours actif (date d'adhesion ok) => ok
+        -disponible (un exemplaire dispo) => ok
+        -quotaSimple => ok
+        -quotaMaison => ok
+        -dateRetourPrevu pas ferie
+        
+        *Emprunt domicile ok
+
+    SUR PLACE
+        -non penalise au moment de l'emprunt => ok
+        -a l'age requis => ok
+        -est toujours actif => ok
+        -disponible (un exemplaire dispo)=> ok
+        -quotaSimple => ok
+
+-----------------------PENALITE-------------------------
+    En fonction du nb de jours de retard => ok
+    S'accumule au fil des retards => ok
+
+-----------------------RENDRE UN LIVRE--------------------
+    Update stock => ok
+    Maj de la date de retour vis-a-vis de l'emprunt => ok
+    Remettre a jour le quotaMaison => si emprunt quotaMaison => ok
+    Remettre a jour le quotaSimple general => ok
+    Prendre en compte weekends-jours feries => ok
+    Compter le nb de jour de retard si yen a => ok
+    Check si ya pas d'autre penalite deja en cours => ok
+    Penaliser a partir de ce jour => ok
+
+
+----------------------NB-------------------------------------
+    Le nombre de jours d'emprunt a domicile est dans la table parametre emprunt
+
+
+---------------------RESTE A FAIRE--------------------------
+    transformer reservation en pret
+    schema tables (evolutif) =========ok====================
+    pull request
+    script avec donnees => ok
+
+
+-------------------RESERVATION-----------------------------------
+    update la date de traitement de la reservation =>ok
+    update le stock=> ok
+    inserer un emprunt => ok
+    voir si la personne n'a pas ete penalisee entre temps => ok
+    update les quotas des personnes=>ok
+    check si la personne a le droit de reserver : peut l'emmener a la maison => ok

@@ -1,0 +1,19 @@
+1. Tu veux ajouter une fonctionnalité
+Tu crées une nouvelle branche :
+
+git checkout -b ajout-fonctionnalite
+Tu codes, tu fais tes commits :
+
+git add .
+git commit -m "Ajout d’une nouvelle fonctionnalité"
+Tu pousses :
+
+git push origin ajout-fonctionnalite
+
+
+2. Tu vas sur GitHub
+Tu vois un bouton "Compare & pull request"
+
+Tu cliques dessus
+Tu ajoutes un message (ex : "Ajoute une fonction pour calculer les prix")
+Tu soumets la pull request
