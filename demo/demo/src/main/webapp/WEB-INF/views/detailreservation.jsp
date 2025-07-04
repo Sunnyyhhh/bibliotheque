@@ -83,23 +83,34 @@
             align-items: center;
             gap: 1rem;
             flex-wrap: wrap;
+            margin-top: 1rem;
         }
 
         input[type="submit"] {
             background: #3182ce;
             color: white;
-            padding: 0.75rem 1rem;
+            padding: 0.75rem 1.5rem;
             border: none;
             border-radius: 8px;
             font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
             transition: background 0.3s ease, transform 0.2s ease;
+            display: inline-block; /* Assure que le bouton est visible */
+            min-width: 100px; /* Définit une largeur minimale pour le bouton */
+            text-align: center;
         }
 
         input[type="submit"]:hover {
             background: #2b6cb0;
             transform: translateY(-2px);
+        }
+
+        input[type="date"] {
+            padding: 0.5rem;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            font-size: 0.9rem;
         }
 
         .no-reservations {
@@ -146,6 +157,10 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
+
+            input[type="submit"] {
+                width: 100%; /* Bouton pleine largeur sur mobile */
+            }
         }
     </style>
 </head>
@@ -161,18 +176,25 @@
             %>
                 <% Reservation resa=Reservations.get(i);%>
                 <li class="reservation-item">
-                        <div class="reservation-details">
+                    <div class="reservation-details">
+                        <form action="${pageContext.request.contextPath}/Reservations/validerIndividuel" method="post">
+                            <input type="hidden" name="idlivre" value="<%= resa.getLivre().getIdLivre()%>">
                             <strong><%= resa.getUtilisateur().getNom() %></strong><br>
-                            <p>
-                                Reservation effectuee le : <%= resa.getDateAction() %>
-                            </p>
-                        </div>
+                            <p>Réservation effectuée le : <%= sdf.format(resa.getDateAction()) %></p>
+                            <div class="form-group">
+                                <label for="dateTraitement-<%= i %>">Date de validation :</label>
+                                <input type="hidden" name="idReservation" value="<%= resa.getIdReservation()%>">
+                                <input type="date" id="dateTraitement-<%= i %>" name="dtTraitement" required>
+                                <input type="submit" value="Valider">
+                            </div>
+                        </form>
+                    </div>
                 </li>
             <%
                     }
                 } else {
             %>
-                <li class="no-reservations">Aucune réservation n'a actuellement été trouvee</li>
+                <li class="no-reservations">Aucune réservation n'a actuellement été trouvée</li>
             <%
                 }
             %>

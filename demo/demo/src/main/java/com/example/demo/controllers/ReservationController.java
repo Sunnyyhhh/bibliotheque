@@ -129,7 +129,7 @@ public class ReservationController {
             isAllowedHome = parametreempruntService.isAllowedHome(user.getAdherent().getId_Adherent(), book.getIdLivre());
 
         } else {
-            model.addAttribute("erreur", "Livre non trouvé");
+            model.addAttribute("erreur", "Livre non trouve");
             return "error";
         }
 
@@ -186,7 +186,7 @@ public class ReservationController {
             if (book.isPresent()) {
                 boky = book.get();
             } else {
-                model.addAttribute("erreur", "Livre non trouvé");
+                model.addAttribute("erreur", "Livre non trouve");
                 return "error";
             }
 
@@ -303,5 +303,120 @@ public class ReservationController {
     @GetMapping("/retourReservation")
     public String retourReservation(Model model) {
         return "home";
+    }
+
+    @PostMapping("/validerIndividuel")
+    public String validerIndividuel(Model model,
+            @RequestParam("idlivre") Integer idlivre,
+            @RequestParam("dtTraitement") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dt,
+            @RequestParam("idReservation") Integer idreservation) {
+        //reservation a traiter
+        Optional<Reservation> reserve = reservationService.getReservationById(idreservation);
+
+        if (!reserve.isPresent()) {
+            model.addAttribute("erreur", "Reservation non trouvee");
+            return "error";
+        }
+
+        Reservation resa = reserve.get();
+
+        if (!resa.getLivre().getIdLivre().equals(idlivre)) {
+            model.addAttribute("erreur", "La reservation ne correspond pas au livre specifie");
+            return "error";
+        }
+
+        //check disponibilite
+        boolean isDispo = exemplaireService.checkExemplaire(idlivre);
+
+        if (isDispo) {
+            //check penalite
+            boolean isPenalise = penaliteService.findPenaliteByDateByUse(resa.getUtilisateur().getIdUtilisateur(), dt);
+
+            if (!isPenalise) {
+                //getLivre
+                Optional<Livre> book = livreService.getLivreById(idlivre);
+                Livre boky = null;
+                if (book.isPresent()) {
+                    boky = book.get();
+                } else {
+                    model.addAttribute("erreur", "Livre non trouve");
+                    return "error";
+                }
+
+                //maj stock
+                exemplaireService.updateStock(idlivre);
+
+                //getuser
+                Utilisateur user = resa.getUtilisateur();
+
+                //maj reservation
+                reservationService.updateReservation(dt, idlivre, user.getIdUtilisateur(), resa.getDateAction());
+
+                //diminuer quotas
+                Integer quotaGeneral = user.getQuotaPerso();
+                Integer quotaMaison = user.getQuotaPersoMaison();
+                utilisateurService.updateQuota(quotaGeneral - 1, quotaMaison - 1, user.getIdUtilisateur());
+
+                //param emprunt
+                ParametreEmprunt param = parametreempruntService.getParametreByAdherent(user.getAdherent().getId_Adherent(), boky.getIdLivre());
+
+                //calcul date retourprev
+                Integer nbprevueRetour = param.getNbJour();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(dt);
+                calendar.add(Calendar.DAY_OF_MONTH, nbprevueRetour);
+                Date prevuRetour = calendar.getTime();
+
+                //check samedi/dimanche/ferie
+                List<Ferie> allFerie = ferieService.getAllFerie();
+                List<Date> feries = new ArrayList<>();
+                if (!allFerie.isEmpty()) {
+                    for (Ferie f : allFerie) {
+                        feries.add(f.getDate());
+                    }
+                }
+
+                boolean doitRecaler = true;
+                while (doitRecaler) {
+                    doitRecaler = false;
+
+                    for (Date ref : feries) {
+                        if (isMemeJour(prevuRetour, ref)) {
+                            Calendar c = Calendar.getInstance();
+                            c.setTime(prevuRetour);
+                            c.add(Calendar.DAY_OF_MONTH, 1);
+                            prevuRetour = c.getTime();
+                            doitRecaler = true;
+                            break;
+                        }
+                    }
+
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(prevuRetour);
+                    int jour = c.get(Calendar.DAY_OF_WEEK);
+                    if (jour == Calendar.SATURDAY) {
+                        c.add(Calendar.DAY_OF_MONTH, 2);
+                        prevuRetour = c.getTime();
+                        doitRecaler = true;
+                    } else if (jour == Calendar.SUNDAY) {
+                        c.add(Calendar.DAY_OF_MONTH, 1);
+                        prevuRetour = c.getTime();
+                        doitRecaler = true;
+                    }
+                }
+
+                //save pret
+                Pret p = new Pret(dt, null, prevuRetour, boky, user, param);
+                pretService.savePret(p);
+
+                return this.showReservation(model);
+            } else {
+                model.addAttribute("erreur", "L'utilisateur est penalise et ne peut pas emprunter");
+                return "error";
+            }
+        } else {
+            model.addAttribute("messageDisponibilite", "Livre non disponible pour traiter la reservation");
+            return "reponsepret";
+        }
     }
 }
