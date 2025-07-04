@@ -51,4 +51,41 @@ public class UtilisateurService {
         return utilisateur;
     }
 
+    public boolean checkAge(Utilisateur user, CategorieLivre categorie) {
+        Date naissance = user.getDtn();
+        int age = 0;
+        if (naissance != null) {
+            LocalDate birthDate = naissance.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate currentDate = LocalDate.now();
+            age = Period.between(birthDate, currentDate).getYears();
+
+            if (age >= categorie.getAgeMinimum()) {
+                //model.addAttribute("age","Age valide ");
+                return true;
+            } else {
+                //model.addAttribute("age","Age non valide (trop jeune) ");
+                return false;
+            }
+        } else {
+            //model.addAttribute("erreur", "Date de naissance non définie pour l'utilisateur");
+            return false;
+        }
+    }
+
+    public void updateQuota(Integer qperso, Integer qmaison, Integer iduser) {
+        this.utilisateurRepo.updateQuota(qperso, qmaison, iduser);
+    }
+
+    public void updateQuotaPlace(Integer qperso, Integer iduser) {
+        this.utilisateurRepo.updateQuotaPlace(qperso, iduser);
+    }
+
+    public boolean isActive(Utilisateur user, Date dt) {
+        Optional<Abonnement> abonnements = abonnementRepo.findAbonnementByDateByUser(user.getIdUtilisateur(), dt);
+        if (abonnements.isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
 }
