@@ -38,4 +38,19 @@ public class LivreService {
         this.LivreRepo.deleteById(id);
     }
 
+    public List<Livre> getLivreEmpruntesById(Integer id) {
+        List<Pret> prets = PretRepo.getPretByIdUtilisateur(id);
+
+        List<Livre> books = new ArrayList<>();
+
+        for (Pret pt : prets) {
+            Optional<Livre> temp = LivreRepo.findById(pt.getLivre().getIdLivre());
+
+            if (temp.isPresent()) {
+                books.add(temp.get());
+            }
+        }
+        return books;
+    }
+
 }
