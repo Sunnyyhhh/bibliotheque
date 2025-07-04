@@ -10,4 +10,11 @@ import jakarta.transaction.Transactional;
 
 public interface FerieRepository extends JpaRepository<Ferie, Integer> {
 
+    /*@Query("SELECT e.stock FROM Ferie e WHERE e.livre.id = :id")
+    Integer getStockByFerie(@Param("id") Integer id);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Ferie e SET e.stock = :stock WHERE e.livre.id = :id")
+    void updateFerie(@Param("id") Integer id, @Param("stock") Integer stock);*/
 }
