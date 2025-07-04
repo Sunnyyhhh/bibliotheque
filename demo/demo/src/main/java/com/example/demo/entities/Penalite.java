@@ -1,6 +1,9 @@
 package com.example.demo.entities;
 
 import java.util.Date;
+
+import org.apache.tomcat.util.buf.Utf8Encoder;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -26,7 +29,8 @@ public class Penalite {
     @JoinColumn(name = "id_utilisateur", nullable = false)
     private Utilisateur utilisateur;
 
-    public Penalite() {}
+    public Penalite() {
+    }
 
     public Penalite(Date dtDebut, Date dtFin, Utilisateur utilisateur) {
         this.dtDebut = dtDebut;
@@ -66,5 +70,4 @@ public class Penalite {
         this.utilisateur = utilisateur;
     }
 
-    
 }

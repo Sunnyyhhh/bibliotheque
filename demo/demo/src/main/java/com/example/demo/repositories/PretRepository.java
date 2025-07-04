@@ -24,6 +24,10 @@ public interface PretRepository extends JpaRepository<Pret, Integer> {
     @Query("select e from Pret e where e.utilisateur.idUtilisateur=:id and e.livre.idLivre= :idlivre and e.dtRetour is NULL")
     Pret getPretSpecifique(@Param("id") Integer id, @Param("idlivre") Integer idlivre);
 
+    /*@Modifying
+    @Transactional
+    @Query("UPDATE Pret e SET e.dtRetour = :dtr WHERE id_pret = :idPret")
+    void updateExemplaire(@Param("dtRetour") Integer id, @Param("idPret") Integer idPret);*/
     @Modifying
     @Transactional
     @Query("UPDATE Pret e SET e.dtRetour = :dtRetour WHERE e.idPret = :idPret")
