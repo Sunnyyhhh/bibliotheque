@@ -3,6 +3,10 @@
 <%@ page import="com.example.demo.entities.Livre" %>
 <%@ page import="com.example.demo.entities.Utilisateur" %>
 <%@ page import="com.example.demo.entities.Exemplaire" %>
+<%@ page import="com.example.demo.entities.Prolongement" %>
+<%@ page import="com.example.demo.entities.Pret" %>
+<%@ page import="java.util.Date" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -179,24 +183,25 @@
         <h2>Liste des Livres</h2>
         <ul class="book-list">
             <%
-                List<Livre> livres = (List<Livre>) request.getAttribute("livres");
-                if (livres != null && !livres.isEmpty()) {
-                    for (Livre book : livres) {
+                List<Prolongement> prolongements = (List<Prolongement>) request.getAttribute("prolongements");
+                if (prolongements != null && !prolongements.isEmpty()) {
+                    for (Prolongement book : prolongements) {
+                        Utilisateur user=book.getUtilisateur();
+                        Pret p=book.getPret();
+                        Livre livre=p.getLivre();
+                        Date demandeProlongement=book.getDtDemandeProlongement();
             %>
                 <li class="book-item">
-                    <div class="book-title"><%= book.getTitre() %></div>
+                    <div class="book-title"><%= livre.getTitre() %></div>
                         <div class="form-group">
-                            <form action="${pageContext.request.contextPath}/Livres/rendre" method="post">
-                                <label for="dt-return-<%= book.getIdLivre() %>">Date de retour :</label>
-                                <input type="hidden" name="idLivre" value="<%= book.getIdLivre() %>">
-                                <input type="date" id="dt-return-<%= book.getIdLivre() %>" name="dt" required>
-                                <input type="submit" value="Rendre">
-                            </form>
-                            <form action="${pageContext.request.contextPath}/Livres/prolongement" method="post">
-                                <label for="dt-return-<%= book.getIdLivre() %>">Date de demande de prolongement :</label>
-                                <input type="hidden" name="idLivre" value="<%= book.getIdLivre() %>">
-                                <input type="date" id="dt-return-<%= book.getIdLivre() %>" name="dt" required>
-                                <input type="submit" name="prolonger" value="Prolonger prêt" formaction="${pageContext.request.contextPath}/Livres/prolonger">
+                            <form action="${pageContext.request.contextPath}/Livres/validerProlongement" method="post">
+                                <p>Demande effectuee par : <%= user.getNom()%> le <%= demandeProlongement%></p>
+                                <label for="dt-return-<%= p.getIdPret() %>">Date de validation :</label>
+                                <input type="hidden" name="idProlongement" value="<%= book.getIdProlongement() %>">
+                                <input type="hidden" name="idLivre" value="<%= livre.getIdLivre() %>">
+                                <input type="hidden" name="iduser" value="<%= user.getIdUtilisateur()%>">
+                                <input type="date" id="dt-return-<%= livre.getIdLivre() %>" name="dt" required>
+                                <input type="submit" value="Valider le prolongement">
                             </form>
                             <div>
                                 <% String message=(String) request.getAttribute("message"); %>
@@ -210,7 +215,7 @@
                     }
                 } else {
             %>
-                <li class="no-books">Aucun livre n'est actuellement emprunté.</li>
+                <li class="no-books">Aucune demande de prolongement</li>
             <%
                 }
             %>

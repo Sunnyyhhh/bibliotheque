@@ -122,6 +122,7 @@
                         if (user.getStatut() != null && user.getStatut().equals("admin")) {
                     %>
                         <a href="${pageContext.request.contextPath}/Reservations/listeReservation">Liste des réservations</a>
+                        <a href="${pageContext.request.contextPath}/Prolongements/listeProlongement">Liste des prolongements</a>
                     <%
                         }
                     %>

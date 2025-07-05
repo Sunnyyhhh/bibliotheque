@@ -25,6 +25,7 @@ import java.util.Map;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Optional;
 
@@ -43,6 +44,14 @@ import com.example.demo.entities.Exemplaire;
 import com.example.demo.services.ExemplaireService;
 import com.example.demo.entities.Penalite;
 import com.example.demo.services.PenaliteService;
+import com.example.demo.entities.Utilisateur;
+import com.example.demo.services.UtilisateurService;
+import com.example.demo.entities.Prolongement;
+import com.example.demo.services.ProlongementService;
+import com.example.demo.entities.ParametreEmprunt;
+import com.example.demo.services.ParametreEmpruntService;
+import com.example.demo.entities.Ferie;
+import com.example.demo.services.FerieService;
 
 @Controller
 @RequestMapping("/Livres")
@@ -62,6 +71,25 @@ public class LivreController {
 
     @Autowired
     private PenaliteService penaliteService;
+
+    @Autowired
+    private ProlongementService prolongementService;
+
+    @Autowired
+    private ParametreEmpruntService parametreempruntService;
+
+    @Autowired
+    private FerieService ferieService;
+
+    public boolean isMemeJour(Date d1, Date d2) {
+        Calendar c1 = Calendar.getInstance();
+        Calendar c2 = Calendar.getInstance();
+        c1.setTime(d1);
+        c2.setTime(d2);
+        return c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR)
+                && c1.get(Calendar.MONTH) == c2.get(Calendar.MONTH)
+                && c1.get(Calendar.DAY_OF_MONTH) == c2.get(Calendar.DAY_OF_MONTH);
+    }
 
     @GetMapping("/liste")
     public String showLivre(Model model) {
@@ -158,6 +186,132 @@ public class LivreController {
         //return "listeLivre";
         //return "listeLivreEmprunte";
         return "home";
+    }
+
+    @PostMapping("/prolonger")
+    public String prolongerEmpruntLivre(@RequestParam("dt") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dt,
+            @RequestParam("idLivre") Integer idlivre, Model model, HttpSession session) {
+        //avoir le quota de prolongement de la personne
+        Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
+
+        //si la personne a encore un quota de prolongement
+        if (utilisateur.getNbProlongement() > 0) {
+            //avoir le pret de la personne le plus recent pour ce livre
+            Pret pret = pretService.getPretMaxSpecifique(utilisateur.getIdUtilisateur(), idlivre);
+
+            //insertion de prolongement
+            Prolongement p = new Prolongement(utilisateur, pret, 0, dt, null);
+
+            prolongementService.saveProlongement(p);
+        } else {
+            model.addAttribute("message", "Vous n'avez plus le droit d'effectuer un prolongement");
+            return "listeLivreEmprunte";
+        }
+
+        model.addAttribute("message", "Votre demande de prolongement a ete enregistree ");
+        List<Livre> all = this.LivreService.getLivreEmpruntesById(utilisateur.getIdUtilisateur());
+
+        model.addAttribute("livres", all);
+        return "listeLivreEmprunte";
+
+    }
+
+    @PostMapping("validerProlongement")
+    public String validerProlongement(@RequestParam("idProlongement") Integer idProlongement,
+            @RequestParam("dt") @DateTimeFormat(pattern = "yyyy-MM-dd") Date dt,
+            @RequestParam("iduser") Integer idUser,
+            Model model) {
+        //update le prolongement
+        prolongementService.updateProlongement(idProlongement, dt);
+
+        //diminuer le quota de l'user
+        //avoir l'user
+        Optional<Utilisateur> users = utilisateurService.getUtilisateurById(idUser);
+        Utilisateur user = null;
+        if (users.isPresent()) {
+            user = users.get();
+        }
+
+        //avoir le livre
+        Optional<Prolongement> prolong = prolongementService.getProlongementById(idProlongement);
+        Prolongement pro = null;
+        if (prolong.isPresent()) {
+            pro = prolong.get();
+        }
+
+        Livre livre = pro.getPret().getLivre();
+
+        //update le quota
+        utilisateurService.updateQuotaProlongement(user.getNbProlongement() - 1, idUser);
+
+        //update le prolongement
+        prolongementService.updateProlongement(idProlongement, dt);
+
+        //inserer le pret
+        ParametreEmprunt param = parametreempruntService.getParametreByAdherent(user.getAdherent().getId_Adherent(), livre.getIdLivre());
+
+        Integer nbprevueRetour = param.getNbJour();
+
+        //mettre une date de retour pour l'ancien pret
+        Pret borrow = pretService.getPretMaxSpecifique(idUser, livre.getIdLivre());
+        List<Pret> pretsListes = pretService.getPretMaxSpecifiqueListe(user.getIdUtilisateur(), borrow.getLivre().getIdLivre());
+        pretService.updateExemplaireRetour(pretsListes.get(0).getIdPret(), dt);
+
+        //avoir la date prevue de retour
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dt);
+        calendar.add(Calendar.DAY_OF_MONTH, nbprevueRetour);
+        Date prevuRetour = calendar.getTime();
+
+        //check si c'est un jour ouvrable
+        List<Ferie> allFerie = ferieService.getAllFerie();
+        List<Date> feries = new ArrayList<>();
+        if (!allFerie.isEmpty()) {
+            for (Ferie f : allFerie) {
+                Date temp = f.getDate();
+                feries.add(temp);
+            }
+        }
+        //si c'est ferie / dimanche / samedi 
+        // recalculer la date jusqu'à ce qu'elle soit OK (ni férié, ni samedi/dimanche)
+        boolean doitRecaler = true;
+        while (doitRecaler) {
+            doitRecaler = false;
+
+            for (Date ref : feries) {
+                if (isMemeJour(prevuRetour, ref)) {
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(prevuRetour);
+                    c.add(Calendar.DAY_OF_MONTH, 1);
+                    prevuRetour = c.getTime();
+                    doitRecaler = true;
+                    break;
+                }
+            }
+
+            Calendar c = Calendar.getInstance();
+            c.setTime(prevuRetour);
+            int jour = c.get(Calendar.DAY_OF_WEEK);
+            if (jour == Calendar.SATURDAY) {
+                c.add(Calendar.DAY_OF_MONTH, 2);
+                prevuRetour = c.getTime();
+                doitRecaler = true;
+            } else if (jour == Calendar.SUNDAY) {
+                c.add(Calendar.DAY_OF_MONTH, 1);
+                prevuRetour = c.getTime();
+                doitRecaler = true;
+            }
+        }
+
+        //date emprunt,date retour,date prevue retour ,livre,utilisateur
+        Pret p = new Pret(dt, null, prevuRetour, livre, user, param);
+        //enregistrer le pret
+        pretService.savePret(p);
+
+        //retour
+        List<Prolongement> prolongements = prolongementService.getListProlongement();
+        model.addAttribute("prolongements", prolongements);
+        return "listeProlongement";
     }
 
 }

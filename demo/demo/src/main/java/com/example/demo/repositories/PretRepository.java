@@ -24,10 +24,16 @@ public interface PretRepository extends JpaRepository<Pret, Integer> {
     @Query("select e from Pret e where e.utilisateur.idUtilisateur=:id and e.livre.idLivre= :idlivre and e.dtRetour is NULL")
     Pret getPretSpecifique(@Param("id") Integer id, @Param("idlivre") Integer idlivre);
 
-    /*@Modifying
-    @Transactional
-    @Query("UPDATE Pret e SET e.dtRetour = :dtr WHERE id_pret = :idPret")
-    void updateExemplaire(@Param("dtRetour") Integer id, @Param("idPret") Integer idPret);*/
+    @Query("SELECT p FROM Pret p WHERE p.utilisateur.idUtilisateur = :id AND p.livre.idLivre = :idlivre AND p.dtRetour IS NULL AND "
+            + "p.idPret = (SELECT p2.idPret FROM Pret p2 WHERE p2.utilisateur.idUtilisateur = :id AND p2.livre.idLivre = :idlivre AND p2.dtRetour IS NULL)")
+    Pret getPretMaxSpecifique(@Param("id") Integer id, @Param("idlivre") Integer idlivre);
+
+    /*@Query("SELECT p FROM Pret p WHERE p.utilisateur.idUtilisateur = :id AND p.livre.idLivre = :idlivre AND p.dtRetour IS NULL "
+            + "order by id_pret desc")
+    List<Pret> getPretMaxSpecifiqueListe(@Param("id") Integer id, @Param("idlivre") Integer idlivre);*/
+    @Query("SELECT p FROM Pret p WHERE p.utilisateur.idUtilisateur = :id AND p.livre.idLivre = :idlivre AND p.dtRetour IS NULL ORDER BY p.idPret DESC")
+    List<Pret> getPretMaxSpecifiqueListe(@Param("id") Integer id, @Param("idlivre") Integer idlivre);
+
     @Modifying
     @Transactional
     @Query("UPDATE Pret e SET e.dtRetour = :dtRetour WHERE e.idPret = :idPret")

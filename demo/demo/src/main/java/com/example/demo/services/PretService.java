@@ -42,8 +42,15 @@ public class PretService {
         return this.PretRepo.getPretSpecifique(iduser, idlivre);
     }
 
-    public void updateExemplaireRetour(Integer idpret,Date dt)
-    {
+    public Pret getPretMaxSpecifique(Integer iduser, Integer idlivre) {
+        return this.PretRepo.getPretMaxSpecifique(iduser, idlivre);
+    }
+
+    public List<Pret> getPretMaxSpecifiqueListe(Integer iduser, Integer idlivre) {
+        return this.PretRepo.getPretMaxSpecifiqueListe(iduser, idlivre);
+    }
+
+    public void updateExemplaireRetour(Integer idpret, Date dt) {
         this.PretRepo.updateExemplaire(dt, idpret);
     }
 }
