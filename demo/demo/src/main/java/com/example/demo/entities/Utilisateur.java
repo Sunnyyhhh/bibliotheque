@@ -29,6 +29,9 @@ public class Utilisateur {
     @Column(name = "dtn")
     private Date dtn;
 
+    @Column(name = "nb_prolongement_perso")
+    private Integer nbProlongement;
+
     public void setDtn(Date d) {
         this.dtn = d;
     }
@@ -160,5 +163,13 @@ public class Utilisateur {
 
     public void setAbonnement(List<Abonnement> abonnement) {
         this.abonnements = abonnement;
+    }
+
+    public Integer getNbProlongement() {
+        return nbProlongement;
+    }
+
+    public void setNbProlongement(Integer nbProlongement) {
+        this.nbProlongement = nbProlongement;
     }
 }

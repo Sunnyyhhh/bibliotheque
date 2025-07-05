@@ -29,12 +29,29 @@ public class ParametreEmprunt {
     @Column(name = "take_home", nullable = true)
     private Boolean empruntDomicile;
 
+    @Column(name = "nb_prolongement", nullable = true)
+    private Integer nbProlongement;
+
     public ParametreEmprunt(String mode, Adherent ad, Integer nbJour, Livre book, Boolean edomicile) {
         this.setAdherent(ad);
         this.setNbJour(nbJour);
         this.setModeEmprunt(mode);
         this.setLivre(book);
         this.setEmpruntDomicile(edomicile);
+    }
+
+    public ParametreEmprunt(String mode, Adherent ad, Integer nbJour) {
+        this.setAdherent(ad);
+        this.setNbJour(nbJour);
+        this.setModeEmprunt(mode);
+    }
+
+    public void setNbProlongement(Integer nb) {
+        this.nbProlongement = nb;
+    }
+
+    public Integer setNbProlongement() {
+        return this.nbProlongement;
     }
 
     public Integer getIdParametreEmprunt() {
@@ -70,12 +87,6 @@ public class ParametreEmprunt {
     }
 
     public ParametreEmprunt() {
-    }
-
-    public ParametreEmprunt(String mode, Adherent ad, Integer nbJour) {
-        this.setAdherent(ad);
-        this.setNbJour(nbJour);
-        this.setModeEmprunt(mode);
     }
 
     public Livre getLivre() {

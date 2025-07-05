@@ -17,4 +17,5 @@ public interface ParametreEmpruntRepository extends JpaRepository<ParametreEmpru
 
     @Query("SELECT p FROM ParametreEmprunt p WHERE p.adherent.Id_Adherent = :id_Adherent AND modeEmprunt='SUR_PLACE'")
     ParametreEmprunt getParametreEmpruntPlace(@Param("id_Adherent") Integer idAdherent);
+
 }

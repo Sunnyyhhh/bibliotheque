@@ -80,6 +80,10 @@ public class UtilisateurService {
         this.utilisateurRepo.updateQuotaPlace(qperso, iduser);
     }
 
+    public void updateQuotaProlongement(Integer nbProlongement, Integer idUser) {
+        this.utilisateurRepo.updateQuotaProlongement(nbProlongement, idUser);
+    }
+
     public boolean isActive(Utilisateur user, Date dt) {
         Optional<Abonnement> abonnements = abonnementRepo.findAbonnementByDateByUser(user.getIdUtilisateur(), dt);
         if (abonnements.isEmpty()) {
