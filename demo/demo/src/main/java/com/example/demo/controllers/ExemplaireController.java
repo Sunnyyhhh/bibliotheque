@@ -102,7 +102,7 @@ public class ExemplaireController {
             CategorieLivre categorie = null;
 
             //check si la personne est penalisee
-            boolean isPenalise = penaliteService.findPenaliteByDateByUse(id, dt);
+            boolean isPenalise = penaliteService.findPenaliteByDateByUse(user.getIdUtilisateur(), dt);
 
             //check si la personne peut emmener le livre a la maison
             boolean isAllowedHome = false;
