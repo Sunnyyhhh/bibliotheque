@@ -37,6 +37,15 @@ public class ExemplaireService {
         return stock;
     }
 
+    //avoir les details (stock et nb ) pour un livre
+    public Exemplaire getExemplaireByLivre(Integer idLivre) {
+        Exemplaire exemplaire = ExemplaireRepo.findByIdLivre(idLivre);
+        if (exemplaire == null) {
+            throw new RuntimeException("Aucun exemplaire trouvé pour ce livre");
+        }
+        return exemplaire;
+    }
+
     //check s'il reste un exemplaire
     public boolean checkExemplaire(Integer idLivre) {
         Integer stock = ExemplaireRepo.getStockByExemplaire(idLivre);

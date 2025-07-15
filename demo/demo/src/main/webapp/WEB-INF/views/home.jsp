@@ -123,6 +123,7 @@
                     %>
                         <a href="${pageContext.request.contextPath}/Reservations/listeReservation">Liste des réservations</a>
                         <a href="${pageContext.request.contextPath}/Prolongements/listeProlongement">Liste des prolongements</a>
+                        <a href="${pageContext.request.contextPath}/utilisateurs/liste">Liste des membres</a>
                     <%
                         }
                     %>

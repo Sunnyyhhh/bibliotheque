@@ -16,152 +16,168 @@
         }
 
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4e7eb 100%);
+            background: linear-gradient(135deg, #e6ecf3 0%, #d1d9e6 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 1.5rem;
         }
 
         .container {
-            background: white;
-            padding: 2.5rem;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-            max-width: 800px; /* Increased from 600px to make it wider */
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            max-width: 900px;
             width: 100%;
             text-align: center;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .container:hover {
-            transform: translateY(-5px);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.1);
         }
 
         h2 {
-            color: #2d3748;
-            font-size: 1.8rem;
+            color: #1a202c;
+            font-size: 2rem;
             font-weight: 700;
-            margin-bottom: 2rem;
-            letter-spacing: -0.025em;
+            margin-bottom: 2.5rem;
+            letter-spacing: -0.02em;
         }
 
         .book-list {
             list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
+            gap: 1.75rem;
         }
 
         .book-item {
-            background: #f7fafc;
-            padding: 1.5rem;
-            border-radius: 8px;
+            background: #f8fafc;
+            padding: 1.75rem;
+            border-radius: 12px;
             text-align: left;
-            transition: background 0.3s ease;
+            border: 1px solid #e2e8f0;
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
 
         .book-item:hover {
-            background: #edf2f7;
+            background: #f1f5f9;
+            border-color: #cbd5e0;
         }
 
         .book-title {
-            color: #2d3748;
-            font-size: 1.2rem;
+            color: #1a202c;
+            font-size: 1.4rem;
             font-weight: 600;
-            margin-bottom: 1rem;
+            margin-bottom: 1.25rem;
         }
 
         .form-group {
             display: flex;
             align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            flex-wrap: wrap; /* Added to handle wider layout on smaller screens */
+            gap: 1.25rem;
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
         }
 
         label {
-            color: #4a5568;
-            font-size: 0.9rem;
+            color: #2d3748;
+            font-size: 1rem;
             font-weight: 500;
         }
 
         input[type="date"] {
             padding: 0.75rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
+            border: 1px solid #d1d9e6;
+            border-radius: 10px;
             font-size: 1rem;
-            color: #2d3748;
+            color: #1a202c;
+            background: #ffffff;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         input[type="date"]:focus {
             outline: none;
-            border-color: #3182ce;
-            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+            border-color: #2b6cb0;
+            box-shadow: 0 0 0 4px rgba(43, 108, 176, 0.15);
         }
 
         input[type="submit"] {
-            background: #3182ce;
-            color: white;
-            padding: 0.75rem 1rem;
+            background: #2b6cb0;
+            color: #ffffff;
+            padding: 0.75rem 1.5rem;
             border: none;
-            border-radius: 8px;
-            font-size: 0.9rem;
+            border-radius: 10px;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.3s ease, transform 0.2s ease;
+            transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
         }
 
         input[type="submit"]:hover {
-            background: #2b6cb0;
+            background: #2c5282;
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(44, 82, 130, 0.2);
         }
 
         .no-books {
-            color: #4a5568;
-            font-size: 1rem;
+            color: #2d3748;
+            font-size: 1.1rem;
             font-weight: 500;
-            background: #fff5f5;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
+            background: #fef5f5;
+            padding: 1.25rem;
+            border-radius: 12px;
+            margin-bottom: 1.75rem;
+            border: 1px solid #fed7d7;
         }
 
         .return-link {
-            margin-top: 1.5rem;
-            font-size: 0.9rem;
+            margin-top: 2rem;
+            font-size: 1rem;
         }
 
         .return-link a {
-            color: #3182ce;
+            color: #2b6cb0;
             text-decoration: none;
-            font-weight: 500;
-            padding: 0.75rem 1.5rem;
-            background: #edf2f7;
-            border-radius: 8px;
+            font-weight: 600;
+            padding: 0.75rem 2rem;
+            background: #f1f5f9;
+            border-radius: 10px;
             transition: background 0.3s ease, transform 0.2s ease, color 0.3s ease;
         }
 
         .return-link a:hover {
-            color: #2b6cb0;
+            color: #2c5282;
             background: #e2e8f0;
             transform: translateY(-2px);
         }
 
         @media (max-width: 480px) {
             .container {
-                padding: 1.5rem;
+                padding: 1.25rem;
             }
 
             h2 {
-                font-size: 1.5rem;
+                font-size: 1.75rem;
+            }
+
+            .book-item {
+                padding: 1.25rem;
             }
 
             .form-group {
                 flex-direction: column;
                 align-items: flex-start;
+                gap: 0.75rem;
+            }
+
+            input[type="submit"] {
+                width: 100%;
+                text-align: center;
             }
         }
     </style>
@@ -177,9 +193,23 @@
             %>
                 <li class="book-item">
                     <div class="book-title"><%= Livre.getTitre() %></div>
+                    <%
+                        Utilisateur user = (Utilisateur) session.getAttribute("utilisateur");
+                        if (user != null) {
+                    %>
+                    <% if (user.getStatut() != null) { %>
+                        <div class="details">
+
+                            <a href="${pageContext.request.contextPath}/DetailExemplaire/detailsPage?id=<%= Livre.getIdLivre() %>">
+                                <button type="button">Voir les détails</button> 
+                            </a>
+                        </div>
+                    <% } %>
+                    <% }%>
+                    <div class="detail"></div>
                     <form action="${pageContext.request.contextPath}/Reservations/reserver" method="post">
                         <div class="form-group">
-                            <label for="dt-reserve-<%= Livre.getIdLivre() %>">A reserver pour le :</label>
+                            <label for="dt-reserve-<%= Livre.getIdLivre() %>">À réserver pour le :</label>
                             <input type="hidden" name="id_livre" value="<%= Livre.getIdLivre() %>">
                             <input type="date" id="dt-reserve-<%= Livre.getIdLivre() %>" name="dt" required>
                             <label for="dt-reserveAction-<%= Livre.getIdLivre() %>">Date de réservation :</label>

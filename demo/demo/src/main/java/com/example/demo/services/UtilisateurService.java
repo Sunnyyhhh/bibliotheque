@@ -92,4 +92,8 @@ public class UtilisateurService {
         return true;
     }
 
+    public List<Utilisateur> getAllUtilisateurs() {
+        return this.utilisateurRepo.findAll();
+    }
+
 }

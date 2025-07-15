@@ -42,6 +42,10 @@ public class PretService {
         return this.PretRepo.getPretSpecifique(iduser, idlivre);
     }
 
+    public Pret getPretSpecifiqueRef(Integer iduser, Integer idlivre, Integer ref) {
+        return this.PretRepo.getPretSpecifiqueRef(iduser, idlivre, ref);
+    }
+
     public Pret getPretMaxSpecifique(Integer iduser, Integer idlivre) {
         return this.PretRepo.getPretMaxSpecifique(iduser, idlivre);
     }
