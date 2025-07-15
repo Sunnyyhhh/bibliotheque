@@ -157,7 +157,7 @@
             '<div class="info"><strong>Stock disponible :</strong> ' + stock + '</div>' +
             '<h3>Details des exemplaires :</h3>' +
             '<ul>' + listeDetails + '</ul>' +
-            '<p><a href="' + window.location.origin + '/Livres/list">Retour à la liste des livres</a></p>';
+            '<p><a href="' + window.location.origin + '/Livres/liste">Retour à la liste des livres</a></p>';
 
         //console.log("HTML genere:", htmlContent);
         container.innerHTML = htmlContent;
