@@ -110,8 +110,8 @@
                 <p>Statut : <%= u.getStatut() != null ? u.getStatut() : "Non défini" %></p>
                 <p>Date de naissance : <%= u.getDtn() != null ? u.getDtn() : "Inconnue" %></p>
                 <div class="form-group">
-                    <form action="${pageContext.request.contextPath}/Utilisateurs/detail" method="post">
-                        <input type="hidden" name="id_utilisateur" value="<%= u.getIdUtilisateur() %>">
+                   <form action="${pageContext.request.contextPath}/utilisateurs/detailsPage" method="get">
+                        <input type="hidden" name="id" value="<%= u.getIdUtilisateur() %>">
                         <input type="submit" value="Voir les détails">
                     </form>
                 </div>
