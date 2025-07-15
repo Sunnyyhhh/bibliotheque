@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import com.example.demo.entities.Exemplaire;
+import java.util.Optional;
 
 import jakarta.transaction.Transactional;
 
@@ -12,6 +13,9 @@ public interface ExemplaireRepository extends JpaRepository<Exemplaire, Integer>
 
     @Query("SELECT e.stock FROM Exemplaire e WHERE e.livre.id = :id")
     Integer getStockByExemplaire(@Param("id") Integer id);
+
+    @Query("SELECT e FROM Exemplaire e WHERE e.livre.idLivre = :id")
+    Exemplaire findByIdLivre(@Param("id") Integer id);
 
     @Modifying
     @Transactional

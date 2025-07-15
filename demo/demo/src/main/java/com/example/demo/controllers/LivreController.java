@@ -51,7 +51,9 @@ import com.example.demo.services.ProlongementService;
 import com.example.demo.entities.ParametreEmprunt;
 import com.example.demo.services.ParametreEmpruntService;
 import com.example.demo.entities.Ferie;
+import com.example.demo.services.DetailExemplaireService;
 import com.example.demo.services.FerieService;
+import com.example.demo.entities.DetailExemplaire;
 
 @Controller
 @RequestMapping("/Livres")
@@ -80,6 +82,9 @@ public class LivreController {
 
     @Autowired
     private FerieService ferieService;
+
+    @Autowired
+    private DetailExemplaireService detailExemplaireService;
 
     public boolean isMemeJour(Date d1, Date d2) {
         Calendar c1 = Calendar.getInstance();
@@ -123,6 +128,9 @@ public class LivreController {
         Pret emprunt = pretService.getPretSpecifique(user.getIdUtilisateur(), idlivre);
         ParametreEmprunt parametre = emprunt.getParametreEmprunt();
         String modeEmprunt = parametre.getModeEmprunt();
+
+        //avoir le detail exemplaire a update 
+        detailExemplaireService.rendreDisponible(emprunt.getIdRef());
 
         Integer quotaGeneral = user.getQuotaPerso();
         Integer quotaMaison = user.getQuotaPersoMaison();

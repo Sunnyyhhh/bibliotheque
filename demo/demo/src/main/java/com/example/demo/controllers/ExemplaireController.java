@@ -43,6 +43,8 @@ import com.example.demo.entities.Abonnement;
 import com.example.demo.services.AbonnementService;
 import com.example.demo.entities.Ferie;
 import com.example.demo.services.FerieService;
+import com.example.demo.entities.DetailExemplaire;
+import com.example.demo.services.DetailExemplaireService;
 
 @Controller
 @RequestMapping("/Exemplaires")
@@ -64,6 +66,9 @@ public class ExemplaireController {
     private AbonnementService abonnementService;
     @Autowired
     private FerieService ferieService;
+
+    @Autowired
+    private DetailExemplaireService detailExemplaireService;
 
     public boolean isMemeJour(Date d1, Date d2) {
         Calendar c1 = Calendar.getInstance();
@@ -198,11 +203,22 @@ public class ExemplaireController {
                     }
                 }
 
-                //date emprunt,date retour,date prevue retour ,livre,utilisateur
-                Pret p = new Pret(dt, null, prevuRetour, livre, user, param);
+                //avoir la reference pour le pret
+                Optional<DetailExemplaire> detailExs = detailExemplaireService.getPremierDisponible(id);
+                DetailExemplaire dtEx = new DetailExemplaire();
+
+                if (detailExs.isPresent()) {
+                    dtEx = detailExs.get();
+                }
+
+                //date emprunt,date retour,date prevue retour ,livre,utilisateur,parametre,id ref dans exemplaire
+                Pret p = new Pret(dt, null, prevuRetour, livre, user, param, dtEx.getIdDetailExemplaire());
+
                 //enregistrer le pret
                 pretService.savePret(p);
 
+                //update la disponibilite de l'exemplaire
+                detailExemplaireService.rendreIndisponible(dtEx.getIdDetailExemplaire());
             } else {
                 /*System.out.println("AGE " + statutAge);
                 System.out.println("DISPONIBILITE " + checkExemplaire);
@@ -304,10 +320,17 @@ public class ExemplaireController {
                 calendar.add(Calendar.DAY_OF_MONTH, nbprevueRetour);
                 Date prevuRetour = calendar.getTime();
 
-                //date emprunt,date retour,date prevue retour ,livre,utilisateur
+                Optional<DetailExemplaire> detailEx = detailExemplaireService.getPremierDisponible(id);
+                DetailExemplaire dtEx = new DetailExemplaire();
+
+                if (detailEx.isPresent()) {
+                    dtEx = detailEx.get();
+                }
+                //date emprunt,date retour,date prevue retour ,livre,utilisateur,id ref
                 ParametreEmprunt param = parametreempruntService.getParametreByAdherentPlace(user.getAdherent().getId_Adherent());
-                //ParametreEmprunt param = parametreempruntService.getParametreByAdherent(user.getAdherent().getId_Adherent(), livre.getIdLivre());
-                Pret p = new Pret(dt, null, prevuRetour, livre, user, param);
+
+                //creation du pret
+                Pret p = new Pret(dt, null, prevuRetour, livre, user, param, dtEx.getIdDetailExemplaire());
 
                 //enregistrer le pret
                 pretService.savePret(p);

@@ -22,15 +22,25 @@ public class Livre {
     @JoinColumn(name = "id_categorie_livre")
     private CategorieLivre categorie;
 
+    @Column(nullable = true, length = 100)
+    private String auteur;
+
     @ManyToOne
     @JoinColumn(name = "id_theme")
     private Theme theme;
 
-    public Livre() {}
+    public Livre() {
+    }
 
     public Livre(Integer id, String titre) {
         this.idLivre = id;
         this.titre = titre;
+    }
+
+    public Livre(Integer id, String titre, String auteur) {
+        this.idLivre = id;
+        this.titre = titre;
+        this.auteur = auteur;
     }
 
     public Integer getIdLivre() {
@@ -63,5 +73,13 @@ public class Livre {
 
     public void setTheme(Theme theme) {
         this.theme = theme;
+    }
+
+    public String getAuteur() {
+        return auteur;
+    }
+
+    public void setAuteur(String auteur) {
+        this.auteur = auteur;
     }
 }

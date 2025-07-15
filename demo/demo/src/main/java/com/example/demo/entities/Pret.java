@@ -26,6 +26,9 @@ public class Pret {
     @Column
     private Date dtRetourPrevue;
 
+    @JoinColumn(name = "idref", nullable = false)
+    private Integer idRef;
+
     @ManyToOne
     @JoinColumn(name = "idLivre", nullable = false)
     private Livre livre;
@@ -48,6 +51,17 @@ public class Pret {
         this.livre = livre;
         this.utilisateur = utilisateur;
         this.parametreEmprunt = parametreEmprunt;
+    }
+
+    public Pret(Date dtEmprunt, Date dtRetour, Date dtRetourPrevue, Livre livre,
+            Utilisateur utilisateur, ParametreEmprunt parametreEmprunt, Integer idref) {
+        this.dtEmprunt = dtEmprunt;
+        this.dtRetour = dtRetour;
+        this.dtRetourPrevue = dtRetourPrevue;
+        this.livre = livre;
+        this.utilisateur = utilisateur;
+        this.parametreEmprunt = parametreEmprunt;
+        this.idRef = idref;
     }
 
     public Integer getIdPret() {
@@ -104,5 +118,13 @@ public class Pret {
 
     public void setParametreEmprunt(ParametreEmprunt parametreEmprunt) {
         this.parametreEmprunt = parametreEmprunt;
+    }
+
+    public void setIdRef(Integer idRef) {
+        this.idRef = idRef;
+    }
+
+    public Integer getIdRef() {
+        return idRef;
     }
 }

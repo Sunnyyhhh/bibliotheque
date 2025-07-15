@@ -90,4 +90,12 @@ public class UtilisateurController {
         }
     }
 
+    @GetMapping("/liste")
+    public String getListeUser(Model model)
+    {
+        List<Utilisateur> users=utilisateurService.getAllUtilisateurs();
+        model.addAttribute("utilisateurs", users);
+
+        return "listeUtilisateur";
+    }
 }
