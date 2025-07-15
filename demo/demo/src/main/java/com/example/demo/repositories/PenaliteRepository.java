@@ -24,4 +24,7 @@ public interface PenaliteRepository extends JpaRepository<Penalite, Integer> {
     @Query("UPDATE Penalite p SET p.dtFin = :newDateFin WHERE p.idPenalite = :id")
     void updateDtFin(@Param("id") Integer id, @Param("newDateFin") Date newDateFin);
 
+    @Query("SELECT p FROM Penalite p WHERE p.utilisateur.idUtilisateur = :idUtilisateur AND :currentDate BETWEEN p.dtDebut AND p.dtFin")
+    Optional<Penalite> findCurrentPenaliteByUser(@Param("idUtilisateur") Integer idUtilisateur, @Param("currentDate") Date currentDate);
+
 }

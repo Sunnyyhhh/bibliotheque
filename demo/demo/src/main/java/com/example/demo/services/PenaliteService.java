@@ -52,4 +52,10 @@ public class PenaliteService {
         this.PenaliteRepo.updateDtFin(idPenalite, dt);
     }
 
+    public boolean checkPenaliteNow(Integer iduser) {
+        Date dt = new Date();
+        Optional<Penalite> pe = this.PenaliteRepo.findCurrentPenaliteByUser(iduser, dt);
+        return pe.isPresent();
+    }
+
 }

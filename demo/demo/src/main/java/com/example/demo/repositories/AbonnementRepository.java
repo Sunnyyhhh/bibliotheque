@@ -21,4 +21,8 @@ public interface AbonnementRepository extends JpaRepository<Abonnement, Integer>
     void updateAbonnement(@Param("id") Integer id, @Param("stock") Integer stock);*/
     @Query("SELECT a FROM Abonnement a WHERE a.utilisateur.idUtilisateur = :idUtilisateur AND :date BETWEEN a.Debut AND a.Fin")
     Optional<Abonnement> findAbonnementByDateByUser(@Param("idUtilisateur") Integer idUtilisateur, @Param("date") Date date);
+
+    @Query("SELECT a FROM Abonnement a WHERE a.utilisateur.idUtilisateur = :id AND :currentDate BETWEEN a.Debut AND a.Fin")
+    Optional<Abonnement> findCurrentAbonnementByUser(@Param("id") Integer id, @Param("currentDate") Date currentDate);
+
 }
