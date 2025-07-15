@@ -33,4 +33,10 @@ public class AbonnementService {
         return this.AbonnementRepo.findAbonnementByDateByUser(iduser, dt);
     }
 
+    public boolean checkAbonnementNow(Integer iduser) {
+        Date dt = new Date();
+        Optional<Abonnement> ab = this.AbonnementRepo.findCurrentAbonnementByUser(iduser, dt);
+        return ab.isPresent();
+    }
+
 }

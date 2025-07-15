@@ -99,11 +99,13 @@
         const container = document.getElementById('user-details');
 
         const nom = String(data.nom || "Inconnu");
-        const statut = String(data.statut || "Non défini");
+        const statut = String(data.statut || "Simple utilisateur");
         const dtn = String(data.dtn || "Non précisée");
         const quotaPerso = String(data.quotaPerso != null ? data.quotaPerso : 0);
         const quotaPersoMaison = String(data.quotaPersoMaison != null ? data.quotaPersoMaison : 0);
         const nbProlongement = String(data.nbProlongement != null ? data.nbProlongement : 0);
+        const penalite = String(data.penalite != null ? data.penalite : 0);
+        const abonnement = String(data.status != null ? data.status : "Non actif");
 
         let htmlContent = 
             '<h2>' + nom + '</h2>' +
@@ -111,7 +113,9 @@
             '<div class="info"><strong>Date de naissance :</strong> ' + dtn + '</div>' +
             '<div class="info"><strong>Quota personnel restant:</strong> ' + quotaPerso + '</div>' +
             '<div class="info"><strong>Quota maison restant :</strong> ' + quotaPersoMaison + '</div>' +
-            '<div class="info"><strong>Prolongements restants :</strong> ' + nbProlongement + '</div>';
+            '<div class="info"><strong>Prolongements restants :</strong> ' + nbProlongement + '</div>'+
+            '<div class="info"><strong>Penalité :</strong> ' + penalite + '</div>' +
+            '<div class="info"><strong>status :</strong> ' + abonnement + '</div>';
 
         if (data.adherent) {
             const nomAdherent = String(data.adherent.nom || "Inconnu");

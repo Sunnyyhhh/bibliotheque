@@ -4,7 +4,8 @@ import com.example.demo.entities.Utilisateur;
 import com.example.demo.services.UtilisateurService;
 import com.example.demo.entities.Adherent;
 import com.example.demo.services.AdherentService;
-
+import com.example.demo.services.AbonnementService;
+import com.example.demo.services.PenaliteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,12 @@ public class UtilisateurController {
 
     @Autowired
     private AdherentService adherentService;
+
+    @Autowired
+    private AbonnementService abonnementService;
+
+    @Autowired
+    private PenaliteService penaliteService;
 
     @GetMapping("/goInscription")
     public String goInscription(Model model) {
@@ -102,8 +109,25 @@ public class UtilisateurController {
 
         Utilisateur u = userOpt.get();
 
+        //check si l'user est actif mtnt 
+        boolean isActive = abonnementService.checkAbonnementNow(u.getIdUtilisateur());
+
+        //check si l'user est penalise
+        boolean isPenalized = penaliteService.checkPenaliteNow(u.getIdUtilisateur());
+
         // Préparer les détails utilisateur
         Map<String, Object> response = new HashMap<>();
+        //si actif 
+        if (isActive) {
+            response.put("status", "Actif");
+        } else {
+            response.put("status", "Inactif");
+        }
+        if (isPenalized) {
+            response.put("penalite", "Penalise");
+        } else {
+            response.put("penalite", "Non penalise");
+        }
         response.put("id", u.getIdUtilisateur());
         response.put("nom", u.getNom() != null ? u.getNom() : "Inconnu");
         response.put("statut", u.getStatut() != null ? u.getStatut() : "Non défini");
