@@ -178,7 +178,7 @@ public class LivreController {
 
             //System.out.println("AF    QUOTA GENERAL " + quotaGeneral);
             //System.out.println("AF    QUOTA MAISON " + quotaMaison);
-        } else {
+        } else if ("SUR_PLACE".equals(modeEmprunt)) {
             utilisateurService.updateQuotaPlace(quotaGeneral + 1, user.getIdUtilisateur());
         }
         List<Livre> all = this.LivreService.getAllLivre();

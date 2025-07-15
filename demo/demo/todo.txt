@@ -45,7 +45,7 @@ Criteres d'emprunt par adherent
 ---------------------RESTE A FAIRE--------------------------
     transformer reservation en pret
     schema tables (evolutif) =========ok====================
-    pull request
+    pull request=> ok
     script avec donnees => ok
 
 
