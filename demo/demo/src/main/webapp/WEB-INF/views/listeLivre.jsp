@@ -197,14 +197,12 @@
                         Utilisateur user = (Utilisateur) session.getAttribute("utilisateur");
                         if (user != null) {
                     %>
-                    <% if (user.getStatut() != null) { %>
                         <div class="details">
 
                             <a href="${pageContext.request.contextPath}/DetailExemplaire/detailsPage?id=<%= Livre.getIdLivre() %>">
                                 <button type="button">Voir les détails</button> 
                             </a>
                         </div>
-                    <% } %>
                     <% }%>
                     <div class="detail"></div>
                     <form action="${pageContext.request.contextPath}/Reservations/reserver" method="post">

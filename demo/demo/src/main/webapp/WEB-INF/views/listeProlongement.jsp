@@ -180,7 +180,7 @@
 </head>
 <body>
     <div class="container">
-        <h2>Liste des Livres</h2>
+        <h2>Liste des Prolongements en attente</h2>
         <ul class="book-list">
             <%
                 List<Prolongement> prolongements = (List<Prolongement>) request.getAttribute("prolongements");
@@ -196,7 +196,6 @@
                         <div class="form-group">
                             <form action="${pageContext.request.contextPath}/Livres/validerProlongement" method="post">
                                 <p>Demande effectuee par : <%= user.getNom()%> le <%= demandeProlongement%></p>
-                                <label for="dt-return-<%= p.getIdPret() %>">Date de validation :</label>
                                 <input type="hidden" name="idProlongement" value="<%= book.getIdProlongement() %>">
                                 <input type="hidden" name="idLivre" value="<%= livre.getIdLivre() %>">
                                 <input type="hidden" name="iduser" value="<%= user.getIdUtilisateur()%>">

@@ -115,7 +115,7 @@ public class UtilisateurController {
         //check si l'user est penalise
         boolean isPenalized = penaliteService.checkPenaliteNow(u.getIdUtilisateur());
 
-        // Préparer les détails utilisateur
+        //Details user
         Map<String, Object> response = new HashMap<>();
         //si actif 
         if (isActive) {
@@ -123,21 +123,25 @@ public class UtilisateurController {
         } else {
             response.put("status", "Inactif");
         }
+        //si penalise
         if (isPenalized) {
             response.put("penalite", "Penalise");
         } else {
             response.put("penalite", "Non penalise");
         }
+
+        response.put("num", u.getNumAdherent());
         response.put("id", u.getIdUtilisateur());
         response.put("nom", u.getNom() != null ? u.getNom() : "Inconnu");
-        response.put("statut", u.getStatut() != null ? u.getStatut() : "Non défini");
+        response.put("statut", u.getStatut() != null ? u.getStatut() : "Utilisateur simple");
         response.put("dtn", u.getDtn() != null ? u.getDtn().toString() : "Non précisée");
         response.put("quotaPerso", u.getQuotaPerso() != null ? u.getQuotaPerso() : 0);
         response.put("quotaPersoMaison", u.getQuotaPersoMaison() != null ? u.getQuotaPersoMaison() : 0);
         response.put("nbProlongement", u.getNbProlongement() != null ? u.getNbProlongement() : 0);
 
-        // Si l'utilisateur a un adhérent lié, on retourne aussi ses infos
+        //adherent retourne
         Adherent ad = u.getAdherent();
+        //System.out.println("ADHERENT : " + ad.getNom_Adherent());
         if (ad != null) {
             Map<String, Object> adherentMap = new HashMap<>();
             adherentMap.put("nom", ad.getNom_Adherent() != null ? ad.getNom_Adherent() : "Inconnu");
@@ -152,8 +156,8 @@ public class UtilisateurController {
 
     @GetMapping("/detailsPage")
     public String showDetailsUtilisateurPage(@RequestParam("id") Integer id, Model model) {
-        model.addAttribute("id", id); // PAS idUtilisateur !
-        return "detailsUtilisateur"; // JSP vue dans /WEB-INF/views/
+        model.addAttribute("id", id);
+        return "detailsUtilisateur";
     }
 
 }

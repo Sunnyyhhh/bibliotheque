@@ -15,26 +15,24 @@ import jakarta.persistence.OneToOne;
 import java.util.*;
 
 @Entity
-public class Adherent
-{
+public class Adherent {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer Id_Adherent;
 
-    public void setId_Adherent(Integer id)
-    {
-        this.Id_Adherent=id;
+    public void setId_Adherent(Integer id) {
+        this.Id_Adherent = id;
     }
 
-    public Integer getId_Adherent()
-    {
+    public Integer getId_Adherent() {
         return this.Id_Adherent;
     }
 
     @Column
     String Nom_Adherent;
 
-    @Column 
+    @Column
     Integer QuotaMaison;
 
     @Column
@@ -42,55 +40,49 @@ public class Adherent
 
     @Column
     Integer NbJourEmprunt;
-    
-    public Integer getQuota()
-    {
+
+    @Column
+    Integer nbPenalite;
+
+    public Integer getQuota() {
         return this.Quota;
     }
 
-    public void setQuota(Integer q)
-    {
-        this.Quota=q;
+    public void setQuota(Integer q) {
+        this.Quota = q;
     }
 
-
-    public Integer getQuotaMaison()
-    {
+    public Integer getQuotaMaison() {
         return this.QuotaMaison;
     }
 
-    public void setQuotaMaison(Integer q)
-    {
-        this.QuotaMaison=q;
+    public void setQuotaMaison(Integer q) {
+        this.QuotaMaison = q;
     }
 
-    public void setNom_Adherent(String nom)
-    {
-        this.Nom_Adherent=nom;
+    public void setNom_Adherent(String nom) {
+        this.Nom_Adherent = nom;
     }
 
-    public String getNom_Adherent()
-    {
+    public String getNom_Adherent() {
         return this.Nom_Adherent;
     }
 
     @OneToMany(mappedBy = "adherent")
     private List<Utilisateur> utilisateurs;
 
-    public void setUtilisateur(List<Utilisateur> user)
-    {
-        this.utilisateurs=user;
+    public void setUtilisateur(List<Utilisateur> user) {
+        this.utilisateurs = user;
     }
 
-    public List<Utilisateur> getUtilisateur()
-    {
+    public List<Utilisateur> getUtilisateur() {
         return this.utilisateurs;
     }
 
-    public Adherent(){}
+    public Adherent() {
+    }
 
-    public Adherent(Integer id,String nom,Integer q,Integer qo,Integer j)
-    {
+    public Adherent(Integer id, String nom, Integer q, Integer qo, Integer j) {
         this.setId_Adherent(id);
         this.setNom_Adherent(nom);
         this.setQuotaMaison(q);
@@ -106,4 +98,12 @@ public class Adherent
         this.NbJourEmprunt = NbJourEmprunt;
     }
 
-} 
+    public Integer getNbPenalite() {
+        return nbPenalite;
+    }
+
+    public void setNbPenalite(Integer nbPenalite) {
+        this.nbPenalite = nbPenalite;
+    }
+
+}

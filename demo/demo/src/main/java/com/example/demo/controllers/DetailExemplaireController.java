@@ -113,10 +113,18 @@ public class DetailExemplaireController {
         //theme
         String themeNom = (l.getTheme() != null && l.getTheme().getLibelle() != null) ? l.getTheme().getLibelle() : "Inconnu";
 
+        //isbn
+        String ibsn = (l.getIsbn() != null) ? l.getIsbn() : "Inconnu";
+
+        //langue
+        String langue = (l.getLangue() != null) ? l.getLangue() : "Inconnue";
+
+        response.put("isbn", ibsn);
         response.put("titre", titre);
         response.put("auteur", auteur);
         response.put("categorie", categorieNom);
         response.put("theme", themeNom);
+        response.put("langue", langue);
 
         return ResponseEntity.ok(response);
     }

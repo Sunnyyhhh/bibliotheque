@@ -78,8 +78,6 @@
 <body>
 <div class="container">
     <div id="livre-details">
-        <div class="loader"></div>
-        <p>Chargement des details...</p>
     </div>
 </div>
 
@@ -131,6 +129,8 @@
         const theme = String(data.theme || "Non specifie");
         const nb = String(data.nb !== undefined ? data.nb : 0);
         const stock = String(data.stock !== undefined ? data.stock : 0);
+        const isbn=String(data.isbn !== undefined ? data.isbn : "Inconnu");
+        const langue=String(data.langue !== undefined ? data.langue : "Inconnue");
 
         //console.log("Valeurs extraites:", {titre, auteur, categorie, theme, nb, stock});
         //console.log("Types des valeurs:", typeof titre, typeof auteur, typeof categorie, typeof theme, typeof nb, typeof stock);
@@ -151,6 +151,8 @@
         const htmlContent = 
             '<h2>' + titre + '</h2>' +
             '<p class="meta">par ' + auteur + '</p>' +
+            '<p> Isbn :'+isbn+'</p>' +
+            '<p> Langue :' + langue +'</p>'+
             '<div class="info"><strong>Categorie :</strong> ' + categorie + '</div>' +
             '<div class="info"><strong>Thème :</strong> ' + theme + '</div>' +
             '<div class="info"><strong>Nombre d\'exemplaires :</strong> ' + nb + '</div>' +

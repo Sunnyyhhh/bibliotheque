@@ -63,9 +63,7 @@
 </head>
 <body>
 <div class="container">
-    <div id="user-details">
-        <div class="loader"></div>
-        <p>Chargement des détails de l'utilisateur...</p>
+    <div id="user-details">      
     </div>
 </div>
 
@@ -106,9 +104,11 @@
         const nbProlongement = String(data.nbProlongement != null ? data.nbProlongement : 0);
         const penalite = String(data.penalite != null ? data.penalite : 0);
         const abonnement = String(data.status != null ? data.status : "Non actif");
+        const num=String(data.num !=null ? data.num:"-");
 
         let htmlContent = 
             '<h2>' + nom + '</h2>' +
+            '<p><i>'+num+'</i></p>'+
             '<div class="info"><strong>Statut :</strong> ' + statut + '</div>' +
             '<div class="info"><strong>Date de naissance :</strong> ' + dtn + '</div>' +
             '<div class="info"><strong>Quota personnel restant:</strong> ' + quotaPerso + '</div>' +

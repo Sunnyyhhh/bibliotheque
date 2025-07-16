@@ -32,6 +32,9 @@ public class Utilisateur {
     @Column(name = "nb_prolongement_perso")
     private Integer nbProlongement;
 
+    @Column(name = "num_adherent")
+    private String numAdherent;
+
     public void setDtn(Date d) {
         this.dtn = d;
     }
@@ -171,5 +174,13 @@ public class Utilisateur {
 
     public void setNbProlongement(Integer nbProlongement) {
         this.nbProlongement = nbProlongement;
+    }
+
+    public String getNumAdherent() {
+        return numAdherent;
+    }
+
+    public void setNumAdherent(String numAdherent) {
+        this.numAdherent = numAdherent;
     }
 }

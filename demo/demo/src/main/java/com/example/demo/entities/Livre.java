@@ -29,6 +29,12 @@ public class Livre {
     @JoinColumn(name = "id_theme")
     private Theme theme;
 
+    @Column(name = "isbn")
+    private String isbn;
+
+    @Column(name = "langue")
+    private String langue;
+
     public Livre() {
     }
 
@@ -41,6 +47,14 @@ public class Livre {
         this.idLivre = id;
         this.titre = titre;
         this.auteur = auteur;
+    }
+
+    public Livre(Integer id, String titre, String auteur, String is, String l) {
+        this.idLivre = id;
+        this.titre = titre;
+        this.auteur = auteur;
+        this.isbn = is;
+        this.langue = l;
     }
 
     public Integer getIdLivre() {
@@ -81,5 +95,21 @@ public class Livre {
 
     public void setAuteur(String auteur) {
         this.auteur = auteur;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+
+    public String getLangue() {
+        return langue;
+    }
+
+    public void setLangue(String langue) {
+        this.langue = langue;
     }
 }
