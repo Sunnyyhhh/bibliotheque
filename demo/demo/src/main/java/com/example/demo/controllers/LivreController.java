@@ -32,6 +32,7 @@ import java.util.Optional;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.example.demo.entities.Livre;
+import com.example.demo.entities.Adherent;
 import com.example.demo.services.LivreService;
 import com.example.demo.entities.Exemplaire;
 import com.example.demo.services.ExemplaireService;
@@ -39,6 +40,7 @@ import com.example.demo.entities.Pret;
 import com.example.demo.services.PretService;
 import com.example.demo.entities.ParametreEmprunt;
 import com.example.demo.services.ParametreEmpruntService;
+import com.example.demo.services.AdherentService;
 
 import com.example.demo.entities.Exemplaire;
 import com.example.demo.services.ExemplaireService;
@@ -145,6 +147,10 @@ public class LivreController {
             throw new IllegalArgumentException("Les dates de retour ne doivent pas être nulles");
         }
 
+        //avoir le nb de jours de penalite 
+        Adherent ad = user.getAdherent();
+        Integer peine = ad.getNbPenalite();
+
         long diffInMillis = dt.getTime() - retourPrevu.getTime();
         int diff = (int) (diffInMillis / (1000 * 60 * 60 * 24));
 
@@ -160,14 +166,14 @@ public class LivreController {
                 // Prolonge la pénalité existante
                 Penalite peineExistante = peineOpt.get();
                 calendar.setTime(peineExistante.getDtFin());
-                calendar.add(Calendar.DAY_OF_MONTH, diff);
+                calendar.add(Calendar.DAY_OF_MONTH, peine);
                 nouvelleFin = calendar.getTime();
 
                 penaliteService.updatePenalite(peineExistante.getIdPenalite(), nouvelleFin);
             } else {
                 //creer une nouvelle penalite
                 calendar.setTime(dt);
-                calendar.add(Calendar.DAY_OF_MONTH, diff);
+                calendar.add(Calendar.DAY_OF_MONTH, peine);
                 nouvelleFin = calendar.getTime();
 
                 Penalite nouvellePeine = new Penalite(dt, nouvelleFin, user);
