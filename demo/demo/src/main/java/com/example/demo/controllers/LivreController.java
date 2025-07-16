@@ -208,8 +208,10 @@ public class LivreController {
         //avoir le quota de prolongement de la personne
         Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateur");
 
+        boolean isActif = utilisateurService.isActive(utilisateur, dt);
+
         //si la personne a encore un quota de prolongement
-        if (utilisateur.getNbProlongement() > 0) {
+        if (utilisateur.getNbProlongement() > 0 && isActif == true) {
             //avoir le pret de la personne le plus recent pour ce livre
             Pret pret = pretService.getPretMaxSpecifique(utilisateur.getIdUtilisateur(), idlivre);
 
@@ -218,7 +220,7 @@ public class LivreController {
 
             prolongementService.saveProlongement(p);
         } else {
-            model.addAttribute("message", "Vous n'avez plus le droit d'effectuer un prolongement");
+            model.addAttribute("message", "Vous n'avez plus le droit d'effectuer un prolongement abonnement expire/nb prolongement expire");
             return "listeLivreEmprunte";
         }
 
@@ -306,11 +308,7 @@ public class LivreController {
             Calendar c = Calendar.getInstance();
             c.setTime(prevuRetour);
             int jour = c.get(Calendar.DAY_OF_WEEK);
-            if (jour == Calendar.SATURDAY) {
-                c.add(Calendar.DAY_OF_MONTH, 2);
-                prevuRetour = c.getTime();
-                doitRecaler = true;
-            } else if (jour == Calendar.SUNDAY) {
+            if (jour == Calendar.SUNDAY) {
                 c.add(Calendar.DAY_OF_MONTH, 1);
                 prevuRetour = c.getTime();
                 doitRecaler = true;

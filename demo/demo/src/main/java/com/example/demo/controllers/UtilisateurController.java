@@ -133,7 +133,7 @@ public class UtilisateurController {
         response.put("num", u.getNumAdherent());
         response.put("id", u.getIdUtilisateur());
         response.put("nom", u.getNom() != null ? u.getNom() : "Inconnu");
-        response.put("statut", u.getStatut() != null ? u.getStatut() : "Non défini");
+        response.put("statut", u.getStatut() != null ? u.getStatut() : "Utilisateur simple");
         response.put("dtn", u.getDtn() != null ? u.getDtn().toString() : "Non précisée");
         response.put("quotaPerso", u.getQuotaPerso() != null ? u.getQuotaPerso() : 0);
         response.put("quotaPersoMaison", u.getQuotaPersoMaison() != null ? u.getQuotaPersoMaison() : 0);
@@ -141,6 +141,7 @@ public class UtilisateurController {
 
         //adherent retourne
         Adherent ad = u.getAdherent();
+        //System.out.println("ADHERENT : " + ad.getNom_Adherent());
         if (ad != null) {
             Map<String, Object> adherentMap = new HashMap<>();
             adherentMap.put("nom", ad.getNom_Adherent() != null ? ad.getNom_Adherent() : "Inconnu");

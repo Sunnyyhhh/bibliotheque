@@ -192,11 +192,7 @@ public class ExemplaireController {
                     Calendar c = Calendar.getInstance();
                     c.setTime(prevuRetour);
                     int jour = c.get(Calendar.DAY_OF_WEEK);
-                    if (jour == Calendar.SATURDAY) {
-                        c.add(Calendar.DAY_OF_MONTH, 2);
-                        prevuRetour = c.getTime();
-                        doitRecaler = true;
-                    } else if (jour == Calendar.SUNDAY) {
+                    if (jour == Calendar.SUNDAY) {
                         c.add(Calendar.DAY_OF_MONTH, 1);
                         prevuRetour = c.getTime();
                         doitRecaler = true;
@@ -220,13 +216,6 @@ public class ExemplaireController {
                 //update la disponibilite de l'exemplaire
                 detailExemplaireService.rendreIndisponible(dtEx.getIdDetailExemplaire());
             } else {
-                /*System.out.println("AGE " + statutAge);
-                System.out.println("DISPONIBILITE " + checkExemplaire);
-                System.out.println("QUOTA G " + quotaGeneral);
-                System.out.println("QUOTA M " + quotaMaison);
-                System.out.println("ALLOWED HOME " + isAllowedHome);
-                System.out.println("ACTIF " + isActif);
-                System.out.println("PENALITE" + isPenalise);*/
 
                 model.addAttribute("message", "Echec de l'emprunt");
                 if (checkExemplaire == false) {

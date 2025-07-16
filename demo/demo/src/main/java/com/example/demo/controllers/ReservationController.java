@@ -31,8 +31,12 @@ import java.util.Map;
 import com.example.demo.entities.CategorieLivre;
 import com.example.demo.entities.Reservation;
 import com.example.demo.services.ReservationService;
+import com.example.demo.entities.DetailExemplaire;
+import com.example.demo.services.DetailExemplaireService;
 import com.example.demo.entities.Livre;
 import com.example.demo.services.LivreService;
+import com.example.demo.entities.StatutReservation;
+import com.example.demo.services.StatutReservationService;
 import com.example.demo.entities.Penalite;
 import com.example.demo.services.PenaliteService;
 import com.example.demo.entities.ParametreEmprunt;
@@ -69,6 +73,11 @@ public class ReservationController {
     private ExemplaireService exemplaireService;
     @Autowired
     private FerieService ferieService;
+    @Autowired
+    private DetailExemplaireService detailExemplaireService;
+
+    @Autowired
+    private StatutReservationService statutReservationService;
 
     public boolean isMemeJour(Date d1, Date d2) {
         Calendar c1 = Calendar.getInstance();
@@ -352,6 +361,10 @@ public class ReservationController {
                 //maj reservation
                 reservationService.updateReservation(dt, idlivre, user.getIdUtilisateur(), resa.getDateAction());
 
+                //enregistrer le statut de reservation
+                StatutReservation statutResa = new StatutReservation(resa.getIdReservation(), dt);
+
+                statutReservationService.save(statutResa);
                 //diminuer quotas
                 Integer quotaGeneral = user.getQuotaPerso();
                 Integer quotaMaison = user.getQuotaPersoMaison();
@@ -405,8 +418,16 @@ public class ReservationController {
                     }
                 }
 
+                //mettre a jour le detail exemplaire 
+                Optional<DetailExemplaire> detailExs = detailExemplaireService.getPremierDisponible(idlivre);
+                DetailExemplaire dtEx = new DetailExemplaire();
+
+                if (detailExs.isPresent()) {
+                    dtEx = detailExs.get();
+                }
+
                 //save pret
-                Pret p = new Pret(dt, null, prevuRetour, boky, user, param);
+                Pret p = new Pret(dt, null, prevuRetour, boky, user, param, dtEx.getIdDetailExemplaire());
                 pretService.savePret(p);
 
                 return this.showReservation(model);

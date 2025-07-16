@@ -72,7 +72,17 @@ INSERT INTO detail_exemplaire (ref, statut, id_livre) VALUES
 INSERT INTO exemplaire (nb, stock, id_livre) VALUES
     (3, 3, 1),   
     (2, 2, 3),   
-    (1, 1, 2);   
+    (1, 1, 2);  
+
+--table adherent
+INSERT INTO adherent (nb_jour_emprunt, nom_adherent, quota, quota_maison,nb_penalite) VALUES
+    (7, 'Etudiant', 2, 2,10),       
+    (9, 'Enseignant', 3, 3,9),     
+    (12, 'Professionnel', 4, 4,8);
+
+update adherent set nb_penalite=10 where nom_adherent='Etudiant';
+update adherent set nb_penalite=9 where nom_adherent='Enseignant';
+update adherent set nb_penalite=8 where nom_adherent='Professionnel'; 
 
 --table parametre emprunt
 -- Étudiant (id_adherent = 1)
@@ -105,6 +115,59 @@ VALUES ('SUR_PLACE', 9, 2, TRUE, NULL, 5);
 -- Professionnel (id_adherent = 3)
 INSERT INTO parametre_emprunt (mode_emprunt, nb_jour, id_adherent, take_home, id_livre, nb_prolongement)
 VALUES ('SUR_PLACE', 12, 3, TRUE, NULL, 7);
+
+--table utilisateur
+INSERT INTO utilisateur (quota_perso, quota_perso_maison, statut, dtn, mot_de_passe, nb_prolongement_perso, nom, id_adherent) VALUES
+  (2, 2, NULL, '2000-01-01 00:00:00', 'mdp', 3, 'Amine Bensaïd', 1),
+  (2, 2, NULL, '2000-01-01 00:00:00', 'mdp', 3, 'Sarah El Khattabi', 1),
+  (2, 2, NULL, '2000-01-01 00:00:00', 'mdp', 3, 'Youssef Moujahid', 1),
+  (3, 3, NULL, '2000-01-01 00:00:00', 'mdp', 5, 'Nadia Benali', 2),
+  (3, 3, NULL, '2000-01-01 00:00:00', 'mdp', 5, 'Karim Haddadi', 2),
+  (3, 3, NULL, '2000-01-01 00:00:00', 'mdp', 5, 'Salima Touhami', 2),
+  (4, 4, NULL, '2000-01-01 00:00:00', 'mdp', 7, 'Rachid El Mansouri', 3),
+  (4, 4, NULL, '2000-01-01 00:00:00', 'mdp', 7, 'Amina Zerouali', 3);
+
+--admin
+INSERT INTO utilisateur (quota_perso, quota_perso_maison, statut, dtn, mot_de_passe, nb_prolongement_perso, nom, id_adherent) VALUES
+(4, 4, NULL, '2000-01-01 00:00:00', 'mdpadmin', 7, 'AdminUser', 3);
+
+--alter noms 
+UPDATE utilisateur SET nom = 'AmineBensaid' WHERE id_utilisateur = 1;
+UPDATE utilisateur SET nom = 'SarahElKhattabi' WHERE id_utilisateur = 2;
+UPDATE utilisateur SET nom = 'YoussefMoujahid' WHERE id_utilisateur = 3;
+UPDATE utilisateur SET nom = 'NadiaBenali' WHERE id_utilisateur = 4;
+UPDATE utilisateur SET nom = 'KarimHaddadi' WHERE id_utilisateur = 5;
+UPDATE utilisateur SET nom = 'SalimaTouhami' WHERE id_utilisateur = 6;
+UPDATE utilisateur SET nom = 'RachidElMansouri' WHERE id_utilisateur = 7;
+UPDATE utilisateur SET nom = 'AminaZerouali' WHERE id_utilisateur = 8;
+
+
+
+  --update les num_adherent
+  UPDATE utilisateur SET num_adherent = CASE id_utilisateur
+    WHEN 1 THEN 'ETU001'
+    WHEN 2 THEN 'ETU002'
+    WHEN 3 THEN 'ETU003'
+    WHEN 4 THEN 'ENS001'
+    WHEN 5 THEN 'ENS002'
+    WHEN 6 THEN 'ENS003'
+    WHEN 7 THEN 'PROF001'
+    WHEN 8 THEN 'PROF002'
+    WHEN 9 THEN 'AD001'
+    END
+    WHERE id_utilisateur BETWEEN 1 AND 9;
+
+--table abonnement
+INSERT INTO abonnement (debut, fin, id_utilisateur) VALUES
+  ('2025-02-01 00:00:00', '2025-07-24 00:00:00', 1),  
+  ('2025-02-01 00:00:00', '2025-07-01 00:00:00', 2), 
+  ('2025-04-01 00:00:00', '2025-12-01 00:00:00', 3),  
+  ('2025-07-01 00:00:00', '2026-07-01 00:00:00', 4),
+  ('2025-08-01 00:00:00', '2026-05-01 00:00:00', 5),  
+  ('2025-07-01 00:00:00', '2026-06-01 00:00:00', 6),  
+  ('2025-06-01 00:00:00', '2025-12-01 00:00:00', 7), 
+  ('2024-10-01 00:00:00', '2025-06-01 00:00:00', 8);  
+
 
 
 --BACKUP 
@@ -148,58 +211,3 @@ bibliotheque=# select *from parametre_emprunt;
                   116 | DOMICILE     |      20 |           6 | t         |        4 |              20
                   117 | DOMICILE     |      20 |           6 | t         |        5 |              20
 (36 rows)
-
-
---table adherent
-INSERT INTO adherent (nb_jour_emprunt, nom_adherent, quota, quota_maison) VALUES
-    (7, 'Etudiant', 2, 2),       
-    (9, 'Enseignant', 3, 3),     
-    (12, 'Professionnel', 4, 4);
-
---table utilisateur
-INSERT INTO utilisateur (quota_perso, quota_perso_maison, statut, dtn, mot_de_passe, nb_prolongement_perso, nom, id_adherent) VALUES
-  (2, 2, NULL, '2000-01-01 00:00:00', 'mdp', 3, 'Amine Bensaïd', 1),
-  (2, 2, NULL, '2000-01-01 00:00:00', 'mdp', 3, 'Sarah El Khattabi', 1),
-  (2, 2, NULL, '2000-01-01 00:00:00', 'mdp', 3, 'Youssef Moujahid', 1),
-  (3, 3, NULL, '2000-01-01 00:00:00', 'mdp', 5, 'Nadia Benali', 2),
-  (3, 3, NULL, '2000-01-01 00:00:00', 'mdp', 5, 'Karim Haddadi', 2),
-  (3, 3, NULL, '2000-01-01 00:00:00', 'mdp', 5, 'Salima Touhami', 2),
-  (4, 4, NULL, '2000-01-01 00:00:00', 'mdp', 7, 'Rachid El Mansouri', 3),
-  (4, 4, NULL, '2000-01-01 00:00:00', 'mdp', 7, 'Amina Zerouali', 3);
-
---alter noms 
-UPDATE utilisateur SET nom = 'AmineBensaid' WHERE id_utilisateur = 1;
-UPDATE utilisateur SET nom = 'SarahElKhattabi' WHERE id_utilisateur = 2;
-UPDATE utilisateur SET nom = 'YoussefMoujahid' WHERE id_utilisateur = 3;
-UPDATE utilisateur SET nom = 'NadiaBenali' WHERE id_utilisateur = 4;
-UPDATE utilisateur SET nom = 'KarimHaddadi' WHERE id_utilisateur = 5;
-UPDATE utilisateur SET nom = 'SalimaTouhami' WHERE id_utilisateur = 6;
-UPDATE utilisateur SET nom = 'RachidElMansouri' WHERE id_utilisateur = 7;
-UPDATE utilisateur SET nom = 'AminaZerouali' WHERE id_utilisateur = 8;
-
-
-
-  --update les num_adherent
-  UPDATE utilisateur SET num_adherent = CASE id_utilisateur
-    WHEN 1 THEN 'ETU001'
-    WHEN 2 THEN 'ETU002'
-    WHEN 3 THEN 'ETU003'
-    WHEN 4 THEN 'ENS001'
-    WHEN 5 THEN 'ENS002'
-    WHEN 6 THEN 'ENS003'
-    WHEN 7 THEN 'PROF001'
-    WHEN 8 THEN 'PROF002'
-    END
-    WHERE id_utilisateur BETWEEN 1 AND 8;
-
---table abonnement
-INSERT INTO abonnement (debut, fin, id_utilisateur) VALUES
-  ('2025-02-01 00:00:00', '2025-07-24 00:00:00', 1),  
-  ('2025-02-01 00:00:00', '2025-07-01 00:00:00', 2), 
-  ('2025-04-01 00:00:00', '2025-12-01 00:00:00', 3),  
-  ('2025-07-01 00:00:00', '2026-07-01 00:00:00', 4),
-  ('2025-08-01 00:00:00', '2026-05-01 00:00:00', 5),  
-  ('2025-07-01 00:00:00', '2026-06-01 00:00:00', 6),  
-  ('2025-06-01 00:00:00', '2025-12-01 00:00:00', 7), 
-  ('2024-10-01 00:00:00', '2025-06-01 00:00:00', 8);  
-

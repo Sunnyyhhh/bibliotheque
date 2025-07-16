@@ -118,15 +118,11 @@
                 <div class="link-group">
                     <a href="${pageContext.request.contextPath}/Livres/liste">Liste des livres</a>
                     <a href="${pageContext.request.contextPath}/Livres/listeEmprunte">Liste des livres empruntés</a>
-                    <%
-                        if (user.getStatut() != null && user.getStatut().equals("admin")) {
-                    %>
+                    
                         <a href="${pageContext.request.contextPath}/Reservations/listeReservation">Liste des réservations</a>
                         <a href="${pageContext.request.contextPath}/Prolongements/listeProlongement">Liste des prolongements</a>
                         <a href="${pageContext.request.contextPath}/utilisateurs/liste">Liste des membres</a>
-                    <%
-                        }
-                    %>
+                    
                 </div>
         <%
             } else {
